@@ -1,0 +1,14 @@
+{
+	"cmsName": "springboot集成框架dome",
+	"version": "v1.0",
+	"author": "刘浩",
+	"homePage": "http://localhost/dome",
+	"server": "windows",
+	"dataBase": "mysql5.1",
+	"maxUpload": "2M",
+	"userRights": "超级管理员",
+	"description": "学习搭建",
+	"powerby": "copyright @2018 刘浩",
+	"record": "京ICP备14040xxx号-1",
+	"keywords": "奋斗"
+}
