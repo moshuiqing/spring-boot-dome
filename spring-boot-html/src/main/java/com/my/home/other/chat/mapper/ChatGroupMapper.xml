@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.my.home.other.chat.mapper.ChatGroupMapper">
+		
+		<resultMap type="com.my.home.other.chat.po.ChatGoup" id="chatGroup">
+			<id property="id" column="id"/>
+			<result property="groupname" column="groupname"/>
+			<result property="avatar" column="avatar"/>
+			<collection property="list" ofType="com.my.home.other.chat.po.ChatUser">
+			<result property="id" column="id"/>
+			<result property="sign" column="sign" />
+			<result property="username" column="username" />
+			<result property="avatar" column="avatar" />
+			<result property="status" column="status" />
+		</collection>
+		</resultMap>
+		
+		<!-- 根据用户id查询我的群 -->
+		<select id="foundChatGroup" resultMap="chatGroup">
+			select  cg.id,cg.groupname,cg.avatar  from chatgoup cg LEFT JOIN groupuser gu on gu.groupid=cg.id LEFT JOIN `user` u on u.uid=gu.userid
+			<where>
+				u.isdel=0 and cg.isdel=0 
+				and  gu.userid=#{id}
+			</where>
+		</select>
+		
+		<!-- 根据群id获取群成员 -->
+		<select id="foundGroupByid"   resultType="com.my.home.other.chat.po.ChatUser">
+			select u.username,u.sign,u.headImg as avatar,u.uid id from chatgoup ct 
+			LEFT JOIN groupuser gu on gu.groupid=ct.id LEFT JOIN `user` u on u.uid=gu.userid 
+			WHERE ct.id=#{id} and u.isdel=0
+		</select>
+		<!-- 查询群数量 -->
+		<select id="getGroupCount" resultType="java.lang.Integer">
+			select count(1) from chatgoup WHERE userid !=#{id} and isdel=0
+			<if test="groupname!=null and groupname!=''">
+				and groupname like '%${groupname}%'
+			</if>
+		</select>
+		<!-- 分页查询 -->
+		<select id="getPageGroup" resultType="com.my.home.other.chat.po.ChatGoup">
+		select * from chatgoup WHERE userid !=#{id} and isdel=0
+			<if test="groupname!=null and groupname!=''">
+				and groupname like '%${groupname}%'
+			</if>
+			<if test="start!=null and end!=null">
+			limit #{start} ,#{end}
+			</if>
+		</select>
+		<!-- 根据群id查询我的群主 -->
+		<select id="getUidByGroupId" resultType="java.lang.String">
+			select userid from chatgoup where id = #{id}
+		</select>
+		<!-- 根据id查询群信息 -->
+		<select id="getGroupInfoByid" resultType="com.my.home.other.chat.po.ChatGoup">
+			select * from chatgoup where id = #{id}
+		</select>	
+		<!-- 绑定用户和群 -->
+		<insert id="addUserToGroup" keyProperty="id" useGeneratedKeys="true">
+			insert into groupuser(groupid,userid<if test="role!=null and role!=''">,role</if>)
+			values(#{groupid},#{userid}<if test="role!=null and role!=''">,#{role}</if>)
+		</insert>
+		
+		<!-- 退群 -->
+		<delete id="refundGroup" parameterType="com.my.home.other.chat.po.GroupUser">
+			DELETE from groupuser WHERE userid=#{userid} and groupid=#{groupid}
+		</delete>
+		<!-- 查询群信息 -->
+		<select id="getChatGroupInfo" resultType="com.my.home.other.chat.po.ChatGoup">
+			SELECT * from chatgoup where id =#{id} and isdel=0
+		</select>
+		<!-- 解散群 -->
+		<update id="dissolution">
+			update chatgoup set isdel=1 where id=#{id}
+		</update>
+		
+		
+</mapper>

@@ -1,0 +1,6 @@
+方法前缀代表权限
+add*     新增
+update*  修改
+delete*  删除
+found*   查找
+

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.my.home.system.mapper.BigMenuMapper">
+	
+	<sql id="key">
+		<trim suffixOverrides=",">
+			<if test="title!=null and title!=''">title,</if>
+			<if test="menu1!=null and menu1!=''">menu1,</if>
+			<if test="icon!=null and icon!=''">icon,</if>
+			<if test="sort!=null">sort,</if>
+		</trim>
+	</sql>
+	<sql id="values">
+		<trim suffixOverrides=",">
+			<if test="title!=null and title!=''">#{title},</if>
+			<if test="menu1!=null and menu1!=''">#{menu1},</if>
+			<if test="icon!=null and icon!=''">#{icon},</if>
+			<if test="sort!=null">#{sort},</if>
+		</trim>
+	</sql>
+	
+	
+	<!-- 简易查询 -->
+	<select id="simpleFound" parameterType="com.my.home.system.po.BigMenu" resultType="com.my.home.system.po.BigMenu">
+		select * from BigMenu
+		<where>
+				isdel = 0
+				<if test="id!=null and id!=''">and id=#{id}</if>
+		</where>
+		order by sort
+	</select>
+	<!-- 新增 -->
+	<insert id="insertMenu" parameterType="com.my.home.system.po.BigMenu" keyProperty="id" useGeneratedKeys="true">
+		insert into BigMenu(<include refid="key"/>) values(<include refid="values"/>)	
+	</insert>
+	<!-- 修改 -->
+	<update id="updateMenu" parameterType="com.my.home.system.po.BigMenu">
+		update BigMenu 
+			<trim prefix="set" suffixOverrides=",">
+				<if test="title!=null and title!=''">title=#{title},</if>
+				<if test="menu1!=null and menu1!=''">menu1=#{menu1},</if>
+				<if test="icon!=null and icon!=''">icon=#{icon},</if>
+				<if test="sort!=null">sort=#{sort},</if>
+				</trim>
+		where isdel = 0 and id =#{id}
+	</update>
+	<!-- 删除 -->
+	<update id="deleteMenu" parameterType="com.my.home.system.po.BigMenu">
+		update BigMenu set isdel=1 where id=#{id}
+	</update>
+	
+	<select id="pageCount"  resultType="java.lang.Integer">
+		select count(1) from BigMenu
+		<where>
+				isdel=0
+			<if test="title!=null and title!=''">and title=#{title}</if>
+			<if test="menu1!=null and menu1!=''">and menu1=#{menu1}</if>
+		</where>
+	</select>
+	
+	<select id="foundBigMenus" resultType="com.my.home.system.po.BigMenu">
+		select * from BigMenu where id in
+		<foreach collection="bigMenus" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+	
+	
+	
+</mapper>

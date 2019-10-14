@@ -1,0 +1,37 @@
+<!-- 模板引用 -->
+<script th:inline="javascript">
+
+var webname = [[${application.webname}]];
+var webstaticname=[[${application.webstaticname}]];
+var ftpip=[[${application.ftpip}]];
+var webip=[[${application.webip}]];
+var source =[[${application.ftpScource}]];
+
+/////////////////////////////////////////////////////
+var tcpIp = [[${application.tcpIp}]];
+var tcpPort = [[${application.tcpPort}]];
+</script>
+
+
+<script type="text/javascript">
+function qjty(d){
+	var flag = true;
+ 	if(d.code==-4){
+		layer.alert(d.msg,{icon:7,title:'警告'},function(){
+			if(window.parent!=window){
+				parent.window.location.reload();
+			}else{
+				window.location.reload();
+			}
+			
+		
+		})
+		flag=false;
+	}else  if(d.exception != null) {
+			layer.msg(d.exception);
+			flag=false;
+	}
+	return flag;
+}
+
+</script>	

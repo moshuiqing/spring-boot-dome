@@ -1,0 +1,11 @@
+{
+	"webFilePath":[
+		"/web/default/{yyyy}{mm}{dd}/{time}{rand:6}"
+		],
+	"mobileFilePath":[
+		"/mobile/default/{yyyy}{mm}{dd}/{time}{rand:6}"
+		
+		
+		]
+
+}

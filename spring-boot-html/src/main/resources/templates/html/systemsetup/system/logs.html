@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="https://www.pollix.at/thymeleaf/shiro">
+<div th:include="tongyong" ></div>
+<head>
+	<meta charset="utf-8"/>
+	<title>系统日志</title>
+	<meta name="renderer" content="webkit"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<meta name="format-detection" content="telephone=no"/>
+	<link rel="stylesheet" th:attr="href=${application.webstaticname}+@{resouce/html/layuicms2.0/layui/css/layui.css}" media="all" />
+	<link rel="stylesheet" th:attr="href=${application.webstaticname}+@{resouce/html/layuicms2.0/css/public.css}" media="all" />
+</head>
+<body class="childrenBody">
+	<table id="logs" lay-filter="logs"></table>
+   	<script type="text/javascript" th:attr="src=${application.webstaticname}+@{resouce/html/layuicms2.0/layui/layui.js}"></script>
+	<script type="text/javascript" th:attr="src=${application.webstaticname}+@{resouce/html/layuicms2.0/page/logs.js}"></script>
+ </body>
+</html>

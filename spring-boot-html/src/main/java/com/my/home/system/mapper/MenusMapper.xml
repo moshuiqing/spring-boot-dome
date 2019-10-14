@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.my.home.system.mapper.MenusMapper">
+	
+	
+	<sql id="key">
+		<trim suffixOverrides=",">
+			<if test="title!=null and title!=''">title,</if>
+			<if test="icon!=null and icon!=''">icon,</if>
+			<if test="href!=null and href!=''">href,</if>
+			<if test="parent!=null and parent!=''">parent,</if>
+			<if test="menu1!=null and menu1!=''">menu1,</if>
+			<if test="sort!=null and sort!=''">sort,</if>
+		</trim>
+	</sql>
+	<sql id="values">
+		<trim suffixOverrides=",">
+			<if test="title!=null and title!=''">#{title},</if>
+			<if test="icon!=null and icon!=''">#{icon},</if>
+			<if test="href!=null and href!=''">#{href},</if>
+			<if test="parent!=null and parent!=''">#{parent},</if>
+			<if test="menu1!=null and menu1!=''">#{menu1},</if>
+			<if test="sort!=null and sort!=''">#{sort},</if>
+		</trim>
+	</sql>
+	
+	<!-- 查询 -->
+	<select id="simleFound" parameterType="com.my.home.system.po.Menus" resultType="com.my.home.system.po.Menus"> 
+		select * from Menus
+		<where>
+				isdel = 0
+			<if test="menu1!=null and menu1!=''">and menu1=#{menu1}</if>
+			<if test="parent!=null and parent!=''">and parent=#{parent}</if>
+			<if test="parent==null and parent!=''">and parent is null</if>
+		</where>
+		order by sort
+	</select>
+	<!-- 删除 -->
+	<update id="deleteMenus" parameterType="com.my.home.other.util.po.Menu">
+		update  Menus set isdel=1 
+		<where>
+			<if test="id!=null and id!=''">and id=#{id}</if>
+			<if test="menu1!=null and menu1!=''">and menu1=#{menu1}</if>
+			<if test="parent!=null and parent!=''">or parent=#{parent}</if>
+		</where>
+
+	</update>
+	<!-- 新增 -->
+	<insert id="insertMenus" parameterType="com.my.home.other.util.po.Menu" keyProperty="id" useGeneratedKeys="true">
+		insert into Menus(<include refid="key"/>) values(<include refid="values"/>)
+	</insert>
+	<!-- 修改 -->
+	<update id="updateMenus" parameterType="com.my.home.other.util.po.Menu">
+		update Menus 
+		<trim prefix="set" suffixOverrides=",">
+			<if test="title!=null and title!=''">title=#{title},</if>
+			<if test="icon!=null and icon!=''">icon=#{icon},</if>
+			<if test="href!=null">href=#{href},</if>
+			<if test="parent!=null and parent!=''">parent=#{parent},</if>
+			<if test="menu1!=null and menu1!=''">menu1=#{menu1},</if>
+			<if test="sort!=null and sort!=''">sort=#{sort},</if>
+		</trim>
+		where id=#{id}
+	</update>
+	
+	<select id="countNum" parameterType="com.my.home.other.util.po.Menu" resultType="java.lang.Integer">
+		select count(1) from menus
+		<where>
+			isdel = 0
+			<if test="title!=null and title!=''">and title=#{title}</if>
+			<if test="menu1!=null and menu1!=''">and menu1=#{menu1}</if>
+		</where>
+	</select>
+	
+
+	
+</mapper>

@@ -1,0 +1,37 @@
+{"properties": [
+  {
+    "name": "webname",
+    "type": "java.lang.String",
+    "description": "A description for 'webname'"
+  },
+  {
+    "name": "webstaticname",
+    "type": "java.lang.String",
+    "description": "A description for 'webstaticname'"
+  },
+  {
+    "name": "ftpip",
+    "type": "java.lang.String",
+    "description": "A description for 'ftpip'"
+  },
+  {
+    "name": "sysUser",
+    "type": "java.lang.String",
+    "description": "A description for 'sysUser'"
+  },
+  {
+    "name": "systemuser",
+    "type": "java.lang.String",
+    "description": "A description for 'systemuser'"
+  },
+  {
+    "name": "mail.fromMail.addr",
+    "type": "java.lang.String",
+    "description": "A description for 'mail.fromMail.addr'"
+  },
+  {
+    "name": "mail.fromMail.addr",
+    "type": "java.lang.String",
+    "description": "A description for 'mail.fromMail.addr'"
+  }
+]}

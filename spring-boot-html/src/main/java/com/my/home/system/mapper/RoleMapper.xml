@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.my.home.system.mapper.RoleMapper">
+	
+	<sql id="key">
+		<trim suffixOverrides=",">
+			<if test="rname!=null and rname!=''">rname,</if>
+			<if test="modelid!=null and modelid!=''">modelid,</if>
+			<if test="menuid!=null and menuid!=''">menuid,</if>
+			<if test="bigmenuid!=null and bigmenuid!=''">bigmenuid,</if>
+			<if test="remake!=null and remake!=''">remake,</if>
+		</trim>
+	</sql>
+
+	<sql id="value">
+		<trim suffixOverrides=",">
+			<if test="rname!=null and rname!=''">#{rname},</if>
+			<if test="modelid!=null and modelid!=''">#{modelid},</if>
+			<if test="menuid!=null and menuid!=''">#{menuid},</if>
+			<if test="bigmenuid!=null and bigmenuid!=''">#{bigmenuid},</if>
+			<if test="remake!=null and remake!=''">#{remake},</if>
+		</trim>
+	</sql>
+
+	<!-- 查询 -->
+	<select id="simpleFoundRole" parameterType="com.my.home.system.po.Role" resultType="com.my.home.system.po.Role" >
+		select * from Role
+		<where>
+				isdel=0
+			<if test="rid!=null and rid!=null">
+				and rid=#{rid}
+			</if>
+		</where>
+	</select>
+	
+	<select id="FoundRole" parameterType="com.my.home.system.po.Role" resultType="com.my.home.system.po.Role" >
+		select * from Role
+		<where>
+				isdel=0
+			<if test="rid!=null and rid!=null">
+				and rid=#{rid}
+			</if>
+			<if test="rname!=null and rname!=''">and rname=#{rname}</if>
+		</where>
+	</select>
+	
+	
+	<!-- 新增 -->
+	<insert id="insertRole" parameterType="com.my.home.system.po.Role" keyProperty="rid" useGeneratedKeys="true">
+		insert into Role(<include refid="key"/>) values(<include refid="value"/>)
+	</insert>
+	<!-- 修改 -->
+	<update id="updateRole" parameterType="com.my.home.system.po.Role">
+		update Role 
+		<trim prefix="set" suffixOverrides=",">
+			<if test="rname!=null and rname!=''">rname=#{rname},</if>
+			<if test="modelid!=null ">modelid=#{modelid},</if>
+			<if test="menuid!=null">menuid=#{menuid},</if>
+			<if test="bigmenuid!=null ">bigmenuid=#{bigmenuid},</if>
+			<if test="remake!=null and remake!=''">remake=#{remake},</if>
+			<if test="isdisable!=null and isdisable!=''">isdisable=#{isdisable},</if>
+		</trim>
+		where rid=#{rid}
+	</update>
+	<!-- 删除  -->
+	<update id="deleteRole" parameterType="com.my.home.system.po.Role">
+		update Role set isdel=1 where rid = #{rid}
+	</update>
+	<!-- 分页查询 -->
+	<select id="pageFoundRole"  resultType="com.my.home.system.po.Role">
+		select * from role 
+		<where>
+			isdel = 0 
+			<if test="r.rname!=null and r.rname!=''">and rname like '%${r.rname}%'</if>
+			<if test="r.isdisable!=null and r.isdisable!=''">and isdisable=#{r.isdisable},</if>
+		</where>
+		<if test="start!=null and end!=null">
+			limit #{start} ,#{end}
+		</if>
+	</select>
+	<!-- 查询数量 -->
+	<select id="pageCountRole" resultType="java.lang.Integer">
+		select count(1) from role 
+			<where>
+				isdel = 0
+				<if test="r.rname!=null and r.rname!=''">and rname like '%${r.rname}%'</if>
+				<if test="r.isdisable!=null and r.isdisable!=''">and isdisable=#{r.isdisable},</if>
+			</where>
+	</select>
+	
+	
+</mapper>

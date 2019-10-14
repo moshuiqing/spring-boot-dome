@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.my.home.system.mapper.SysLogMapper">
+	
+	<!-- 新增 -->
+	<insert id="insert" parameterType="com.my.home.system.po.Syslog" keyProperty="logId" useGeneratedKeys="true">
+		insert into syslog (url,method,ip,timeConsuming,isAbnormal,operator,operatingTime)
+		values(#{url},#{method},#{ip},#{timeConsuming},#{isAbnormal},#{operator},#{operatingTime})
+	</insert>
+	
+	<!-- 分页查询 -->
+	<select id="pageFound" resultType="com.my.home.system.po.Syslog">
+		select * from syslog 
+		<where>
+			<if test="s.ip!=null and s.ip!=''">and ip like '%${s.ip}%'</if>
+			<if test="s.operator!=null and s.operator!=''">and operator like '%${s.operator}%'</if>
+		</where>
+		<if test="start!=null and end!=null">
+			limit #{start} ,#{end}
+		</if>
+	</select>
+	
+	<select id="pageCount" resultType="java.lang.Integer">
+		select count(1) from syslog 
+		<where>
+			<if test="s.ip!=null and s.ip!=''">and ip like '%${s.ip}%'</if>
+			<if test="s.operator!=null and s.operator!=''">and operator like '%${s.operator}%'</if>
+		</where>
+	</select>
+	
+</mapper>

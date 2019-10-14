@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.my.home.other.chat.mapper.ChatUserMapper">
+		
+		<resultMap type="com.my.home.other.chat.po.ChatUser" id="ChatUser">
+			<id property="id" column="id"/>
+			<result property="sign" column="sign"/>
+			<association property="userid" column="userid" javaType="com.my.home.system.po.SysUser" resultMap="SysUserMap"></association>
+		</resultMap>
+		
+		<resultMap type="com.my.home.system.po.SysUser" id="SysUserMap">
+			<result property="username" column="username"/>
+			<result property="headImg" column="headImg"/>
+		</resultMap>
+		
+		<!-- 根据id查询我的信息 -->
+		<select id="foundChatUser" parameterType="com.my.home.other.chat.po.ChatUser" resultType="com.my.home.other.chat.po.ChatUser">
+			SELECT u.username as username,u.sign as sign,u.`status` as `status`,u.uid as id,u.headImg as avatar from `user` as u
+			<where>
+				u.isdel=0
+				<if test="id!=null and id!=''">and u.uid=#{id}</if>
+			</where>
+		</select>
+		<!-- 查询发送者与接受者的聊天记录 (好友聊天记录)-->
+		<select id="getRecord"  resultType="com.my.home.other.chat.po.ChatUser">
+			SELECT u.username username,u.uid id ,u.headImg avatar,UNIX_TIMESTAMP(cr.`timestamp`)*1000 `timestamp`,cr.content from chatrecord cr
+ 			LEFT JOIN `user` u on u.uid = cr.sendId
+			WHERE (cr.sendId=#{sendId} or cr.sendId=#{toId}) and (cr.toId=#{toId} or cr.toId=#{sendId}) and cr.type=#{type}
+		</select>
+		<!-- 查询群组的聊天记录 -->
+		<select id="getGroupRecord" resultType="com.my.home.other.chat.po.ChatUser">
+			SELECT u.username username,u.uid id ,u.headImg avatar,
+			UNIX_TIMESTAMP(cr.`timestamp`)*1000 `timestamp`,cr.content from chatrecord cr
+			LEFT JOIN `user` u on u.uid = cr.sendId
+			WHERE cr.type='group' and cr.toId = #{id}			
+		</select>
+		
+		<!-- 聊天记录保存 -->
+		<insert id="insertRecord" parameterType="com.my.home.other.chat.po.ChatRecord" keyProperty="id" useGeneratedKeys="true">
+			insert into ChatRecord(sendId,toId,content,timestamp,type)
+			values(#{sendId},#{toId},#{content},now(),#{type})
+		</insert>
+		
+		<!-- 修改信息状态 -->
+		<update id="updateState">
+			update chatrecord set state=1 where id=#{id}
+		</update>
+		<!-- 推荐好友 -->
+		<select id="getRecom" resultType="com.my.home.other.chat.po.ChatUser">
+			select  u.uid id,username,u.headImg avatar,u.sign sign from `user` u  WHERE uid!=#{uid}  and `status`='online' ORDER BY userEndTime DESC LIMIT 10
+		</select>
+		<!-- 查询用户数量 -->
+		<select id="getCount" resultType="java.lang.Integer">
+			select count(1) from user where isdel=0 and uid!=#{uid}
+			<if test="username!=null and username!=''">
+				and username like '%${username}%'
+			</if>
+		</select>
+		<!-- 分页查询 -->
+		<select id="getPage" resultType="com.my.home.other.chat.po.ChatUser">
+			select u.uid id,username,u.headImg avatar,u.sign sign from `user` u  WHERE isdel=0 and uid!=#{uid}
+			<if test="username!=null and username!=''">
+				and username like '%${username}%'
+			</if>
+			<if test="start!=null and end!=null">
+			limit #{start} ,#{end}
+			</if>
+		</select>
+		
+</mapper>

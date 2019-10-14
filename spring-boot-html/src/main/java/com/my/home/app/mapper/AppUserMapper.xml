@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.my.home.app.mapper.AppUserMapper">
+	
+	<sql id="key">
+		<trim suffixOverrides=",">
+			id,
+			userName,
+			password,
+			salt,
+			<if test="remake!=null and remake!=''">remake,</if>
+		</trim>
+	</sql>
+	
+		<sql id="value">
+		<trim suffixOverrides=",">
+			#{id},
+			#{userName},
+			#{password},
+			#{salt},
+			<if test="remake!=null and remake!=''">#{remake},</if>
+		</trim>
+	</sql>
+	
+	<!-- app登录 -->
+	<select id="appLogin" parameterType="com.my.home.app.po.AppUser" resultType="com.my.home.app.po.AppUser">
+		SELECT * from appuser 
+		<where>
+			isdel = 0 
+			<if test="userName!=null and userName!=''">and userName=#{userName}</if>			 	
+		</where>
+	</select>
+	<!-- app注册 -->
+	<insert id="appInsert" parameterType="com.my.home.app.po.AppUser" keyProperty="id" useGeneratedKeys="true">
+		insert into AppUser(<include refid="key"/>) values(<include refid="value"/>)
+	</insert>
+	
+</mapper>

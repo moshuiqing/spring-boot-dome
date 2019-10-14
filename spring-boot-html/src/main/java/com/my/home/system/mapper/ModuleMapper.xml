@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.my.home.system.mapper.ModuleMapper">
+	<!-- 查询 -->
+	<select id="simpleFoundModule" parameterType="com.my.home.system.po.Module" resultType="com.my.home.system.po.Module">
+		select * from Module
+		<where>
+			<if test="mid!=null and mid!=null">
+				mid=#{mid}
+			</if>
+		</where>
+	</select>
+	
+	<select id="FoundModuleByIds" parameterType="com.my.home.system.po.Module" resultType="com.my.home.system.po.Module">
+		select * from Module where mid in
+		<foreach collection="modules" item="id" open="("  separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+</mapper>
